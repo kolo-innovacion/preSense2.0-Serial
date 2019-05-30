@@ -30,6 +30,9 @@ bool leftOut = false;
 bool rightOut = false;
 bool inRange = true;
 
+bool curr = false;
+bool prev = false;
+
 //WARNING: enabling developer mode will enable serial communication, output values through the USB port and change the FPS to 3
 bool developer = false;
 
@@ -43,7 +46,7 @@ void loop() {
   checkRange();
   rangeIndicator();
   getDistance();
-  printVals();
+  //printVals();
   setOutputs();
 
   delay(delTime);
@@ -51,13 +54,32 @@ void loop() {
 
 void setOutputs() {
   if ((distance < triggerVal) && (inRange)) {
+    curr = true;
     setActive();
 
   }
   else
   {
+    curr = false;
     setNormal();
   }
+  checkStatus();
+  statusUpdate();
+}
+
+void statusUpdate() {
+
+  prev = curr;
+}
+
+void checkStatus() {
+  if ((curr == true) && (prev == false)) {
+    //when person is present and previous state was missing (person entry)
+    Serial.write("preSenseEntry\n");
+  } else if ((curr == false) && (prev == true )) {
+    //person exit
+    Serial.write("preSenseExit\n");
+  } else {}
 }
 
 void getDistance() {
@@ -80,10 +102,7 @@ void printVals() {
 }
 
 void startSerial() {
-  if (developer) {
-    Serial.begin(9600);
-    delTime = 333;//3 FPS (1000ms/333ms)
-  } else {}
+  Serial.begin(9600);
 }
 
 void setPinModes() {
