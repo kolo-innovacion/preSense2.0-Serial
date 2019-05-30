@@ -167,9 +167,9 @@ void rangeIndicator() {
 }
 
 void showAlive() {
-  digitalWrite(leftLed , HIGH);
-  delay(rangeTime);
   digitalWrite(rightLed , HIGH);
+  delay(rangeTime);
+  digitalWrite(leftLed , HIGH);
   delay(rangeTime);
   digitalWrite(builtinLed , HIGH);
   delay(rangeTime);
