@@ -104,6 +104,7 @@ void printVals() {
 
 void startSerial() {
   Serial.begin(9600);
+  Serial.write("2.1.0\n");
 }
 
 void setPinModes() {
