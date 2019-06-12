@@ -1,4 +1,5 @@
 //KOLO preSense 2.0
+//FIRMWARE VERSION: 2.1.0
 //Authors: Eduardo Gante + Alejandro Thacker
 // Date: 15/01/2019
 //Arduino Nano ATmega328P + MaxBotix MaxSonar EZ1 (MB1010)
