@@ -1,7 +1,7 @@
 //KOLO preSense 2.0
-//FIRMWARE VERSION: 2.1.0
+//FIRMWARE VERSION: 2.1.1
 //Authors: Eduardo Gante + Alejandro Thacker
-// Date: 15/01/2019
+// Date: 01/02/2019
 //Arduino Nano ATmega328P + MaxBotix MaxSonar EZ1 (MB1010)
 // pin D11: PWM input from ultrasonic sensor PW(M) pin output
 // pin D8: left LED outputh
@@ -34,6 +34,10 @@ bool inRange = true;
 bool curr = false;
 bool prev = false;
 
+//reset after 12 hours (in millis)
+
+int maxTime = 43200000;
+
 //WARNING: enabling developer mode will enable serial communication, output values through the USB port and change the FPS to 3
 bool developer = false;
 
@@ -49,8 +53,16 @@ void loop() {
   getDistance();
   //printVals();
   setOutputs();
-
+  checkReset();
   delay(delTime);
+}
+
+void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
+void checkReset() {
+  if (millis() > maxTime) {
+    resetFunc();  //call reset
+  } else {}
 }
 
 void setOutputs() {
@@ -104,7 +116,7 @@ void printVals() {
 
 void startSerial() {
   Serial.begin(9600);
-  Serial.write("2.1.0\n");
+  Serial.write("2.1.1\n");
 }
 
 void setPinModes() {
