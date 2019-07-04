@@ -38,6 +38,11 @@ bool prev = false;
 
 int maxTime = 43200000;
 
+//continuity
+int index = 0;
+int maxSamples = 6;
+bool samples[6];
+
 //WARNING: enabling developer mode will enable serial communication, output values through the USB port and change the FPS to 3
 bool developer = false;
 
@@ -57,6 +62,14 @@ void loop() {
   delay(delTime);
 }
 
+void checkIndex() {
+  if (index >= maxSamples) {
+    checkSamples();
+    index = 0;
+  } else {
+    index++;
+  }
+}
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
 void checkReset() {
@@ -77,6 +90,7 @@ void setOutputs() {
     setNormal();
   }
   checkStatus();
+  checkIndex();
   statusUpdate();
 }
 
@@ -88,13 +102,32 @@ void statusUpdate() {
 void checkStatus() {
   if ((curr == true) && (prev == false)) {
     //when person is present and previous state was missing (person entry)
-    Serial.write("preSenseEntry\n");
+
+    samples[index] = true;
+    //Serial.write("preSenseEntry\n");
   } else if ((curr == false) && (prev == true )) {
     //person exit
-    Serial.write("preSenseExit\n");
+
+    samples[index] = false;
+    //Serial.write("preSenseExit\n");
   } else if ((curr == true) && (prev == true)) {
-    //Serial.write("Continuous" + String(millis()));
-    Serial.println(millis());
+    samples[index] = true;
+    //Serial.write("Continuous");
+  } else {}
+}
+
+void checkSamples() {
+  bool compare = true;
+
+  for (int i = 0; i < maxSamples; i++) {
+    if (compare && samples[i]) {
+      compare = true;
+    } else {
+      compare = false;
+    }
+  }//end for
+  if (compare) {
+    Serial.println("6 ACHIEVED");
   } else {}
 }
 
