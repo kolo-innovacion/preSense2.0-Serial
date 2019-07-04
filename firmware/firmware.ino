@@ -53,7 +53,7 @@ void loop() {
   getDistance();
   //printVals();
   setOutputs();
-  checkReset();
+  //checkReset();
   delay(delTime);
 }
 
