@@ -40,8 +40,8 @@ int maxTime = 43200000;
 
 //continuity
 int index = 0;
-int maxSamples = 8;
-bool samples[8];//array size must equal maxSamples!
+int maxSamples = 6;
+bool samples[6];//array size must equal maxSamples!
 bool currAch = false;
 bool prevAch = false;
 
