@@ -92,6 +92,9 @@ void checkStatus() {
   } else if ((curr == false) && (prev == true )) {
     //person exit
     Serial.write("preSenseExit\n");
+  } else if ((curr == true) && (prev == true)) {
+    //Serial.write("Continuous" + String(millis()));
+    Serial.println(millis());
   } else {}
 }
 
