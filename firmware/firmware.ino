@@ -40,8 +40,10 @@ int maxTime = 43200000;
 
 //continuity
 int index = 0;
-int maxSamples = 6;
-bool samples[6];
+int maxSamples = 8;
+bool samples[8];//array size must equal maxSamples!
+bool currAch = false;
+bool prevAch = false;
 
 //WARNING: enabling developer mode will enable serial communication, output values through the USB port and change the FPS to 3
 bool developer = false;
@@ -127,7 +129,12 @@ void checkSamples() {
     }
   }//end for
   if (compare) {
-    Serial.println("6 ACHIEVED");
+    //Serial.println("ACHIEVED");
+  } else {}
+  currAch = compare;
+  if ((currAch == true) && (prevAch == false)) {
+    //Serial.println("---SPECIAL");
+    Serial.write("preSenseEntry\n");
   } else {}
 }
 
