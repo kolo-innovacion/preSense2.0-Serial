@@ -1,7 +1,7 @@
 //KOLO preSense 2.0
-//FIRMWARE VERSION: 2.1.1
+//FIRMWARE VERSION: 2.0.0
 //Authors: Eduardo Gante + Alejandro Thacker
-// Date: 01/02/2019
+// Date: 09/07/2019
 //Arduino Nano ATmega328P + MaxBotix MaxSonar EZ1 (MB1010)
 // pin D11: PWM input from ultrasonic sensor PW(M) pin output
 // pin D8: left LED outputh
@@ -31,13 +31,6 @@ bool leftOut = false;
 bool rightOut = false;
 bool inRange = true;
 
-bool curr = false;
-bool prev = false;
-
-//reset after 12 hours (in millis)
-
-int maxTime = 43200000;
-
 //WARNING: enabling developer mode will enable serial communication, output values through the USB port and change the FPS to 3
 bool developer = false;
 
@@ -51,48 +44,21 @@ void loop() {
   checkRange();
   rangeIndicator();
   getDistance();
-  //printVals();
+  printVals();
   setOutputs();
-  checkReset();
+
   delay(delTime);
-}
-
-void(* resetFunc) (void) = 0; //declare reset function @ address 0
-
-void checkReset() {
-  if (millis() > maxTime) {
-    resetFunc();  //call reset
-  } else {}
 }
 
 void setOutputs() {
   if ((distance < triggerVal) && (inRange)) {
-    curr = true;
     setActive();
 
   }
   else
   {
-    curr = false;
     setNormal();
   }
-  checkStatus();
-  statusUpdate();
-}
-
-void statusUpdate() {
-
-  prev = curr;
-}
-
-void checkStatus() {
-  if ((curr == true) && (prev == false)) {
-    //when person is present and previous state was missing (person entry)
-    Serial.write("preSenseEntry\n");
-  } else if ((curr == false) && (prev == true )) {
-    //person exit
-    Serial.write("preSenseExit\n");
-  } else {}
 }
 
 void getDistance() {
@@ -115,8 +81,10 @@ void printVals() {
 }
 
 void startSerial() {
-  Serial.begin(9600);
-  Serial.write("2.1.1\n");
+  if (developer) {
+    Serial.begin(9600);
+    delTime = 333;//3 FPS (1000ms/333ms)
+  } else {}
 }
 
 void setPinModes() {
@@ -181,9 +149,9 @@ void rangeIndicator() {
 }
 
 void showAlive() {
-  digitalWrite(rightLed , HIGH);
-  delay(rangeTime);
   digitalWrite(leftLed , HIGH);
+  delay(rangeTime);
+  digitalWrite(rightLed , HIGH);
   delay(rangeTime);
   digitalWrite(builtinLed , HIGH);
   delay(rangeTime);
