@@ -1,5 +1,5 @@
 //KOLO preSense 2.0
-//FIRMWARE VERSION: 2.1.2 - UPDATE ON OUTPUT!!!
+//FIRMWARE VERSION: 2.1.0 - UPDATE ON OUTPUT!!!
 //Authors: Eduardo Gante + Alejandro Thacker
 // Date: 08/07/2019
 //Arduino Nano ATmega328P + MaxBotix MaxSonar EZ1 (MB1010)
@@ -44,6 +44,8 @@ int maxSamples = 6;
 bool samples[6];//array size must equal maxSamples!
 bool currAch = false;
 bool prevAch = false;
+int entryPause = 3000; //miliseconds to freeze after sending serial
+int exitPause = 1000; //miliseconds to freeze after sending serial
 
 //VERSION
 String fwVersion = "2.1.2\n";
@@ -127,10 +129,15 @@ void checkSamples() {
   if (compare) {
     //Serial.println("ACHIEVED");
   } else {}
+
   currAch = compare;
+
   if ((currAch == true) && (prevAch == false)) {
-    //Serial.println("---SPECIAL");
     Serial.write("preSenseEntry\n");
+    delay(entryPause);
+  } else if ((currAch == false) && (prevAch == true)) {
+    Serial.write("preSenseExit\n");
+    delay(exitPause);
   } else {}
 }
 
@@ -155,7 +162,7 @@ void printVals() {
 
 void startSerial() {
   Serial.begin(9600);
-  Serial.write("2.1.2\n");
+  Serial.write("2.1.0\n");
 }
 
 void setPinModes() {
