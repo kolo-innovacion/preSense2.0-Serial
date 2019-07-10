@@ -37,7 +37,6 @@ bool developer = false;
 void setup() {
   startSerial();
   setPinModes();
-  //showAlive();
   blinkFW(2, 0, 0); //show FW version
 }
 
@@ -160,6 +159,7 @@ void showAlive() {
   digitalWrite(rightLed , LOW);
   digitalWrite(builtinLed , LOW);
 }
+
 void blinkDigit(int n) {
   if (n == 0) {
     delay(rangeTime);
@@ -178,8 +178,10 @@ void blinkDigit(int n) {
 void blinkDot() {
   delay(rangeTime);
   digitalWrite(rightLed , HIGH);
+  digitalWrite(builtinLed , HIGH);
   delay(rangeTime);
   digitalWrite(rightLed , LOW);
+  digitalWrite(builtinLed , LOW);
   delay(rangeTime);
 }
 void blinkSilence() {
