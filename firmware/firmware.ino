@@ -44,8 +44,8 @@ int maxSamples = 6;
 bool samples[6];//array size must equal maxSamples!
 bool currAch = false;
 bool prevAch = false;
-int entryPause = 3000; //miliseconds to freeze after sending serial
-int exitPause = 1000; //miliseconds to freeze after sending serial
+int entryPause = 0; //miliseconds to freeze after sending serial
+int exitPause = 0; //miliseconds to freeze after sending serial
 
 //VERSION
 String fwVersion = "2.1.0\n";
@@ -139,6 +139,7 @@ void checkSamples() {
     Serial.write("preSenseExit\n");
     delay(exitPause);
   } else {}
+  prevAch = currAch;
 }
 
 void getDistance() {
