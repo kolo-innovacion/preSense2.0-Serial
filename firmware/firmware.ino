@@ -104,15 +104,12 @@ void checkStatus() {
     //when person is present and previous state was missing (person entry)
 
     samples[index] = true;
-    //Serial.write("preSenseEntry\n");
   } else if ((curr == false) && (prev == true )) {
     //person exit
 
     samples[index] = false;
-    //Serial.write("preSenseExit\n");
   } else if ((curr == true) && (prev == true)) {
     samples[index] = true;
-    //Serial.write("Continuous");
   } else {}
 }
 
@@ -127,7 +124,6 @@ void checkSamples() {
     }
   }//end for
   if (compare) {
-    //Serial.println("ACHIEVED");
   } else {}
 
   currAch = compare;
